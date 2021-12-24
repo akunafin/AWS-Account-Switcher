@@ -11,9 +11,9 @@ function load_popup() {
     document.getElementById("accounts_tab").addEventListener("click", tab_click);
     document.getElementById("settings_tab").addEventListener("click", tab_click);
     chrome.storage.local.get(["settings"], function(result){
-        if (result.settings == undefined) {result = {}}
+        if (result.settings == undefined) {result.settings = {}}
         if (result.settings.current_tab == undefined) {
-            result.settings.current_tab = "accounts_tab";
+            result.settings.current_tab = "settings_tab";
             chrome.storage.local.set(result);
         }
         openTab(result.settings.current_tab);
@@ -337,7 +337,9 @@ function delete_all_accounts() {
 }
 
 function expire_account(e) {
-    var account = e.currentTarget.closest(".row").querySelector("#account_name").innerText;
+    var account_name = e.currentTarget.closest(".row").querySelector("#account_name").innerText;
+    var account_role = e.currentTarget.closest(".row").querySelector("#account_role").innerText;
+    var account = account_name + '/' + account_role;
     chrome.storage.local.get(["accounts"], function(result) {
         if (result.accounts == undefined) {return}
         if (result.accounts[account] == undefined) {return}
@@ -347,7 +349,9 @@ function expire_account(e) {
 }
 
 function delete_account(e) {
-    var account = e.currentTarget.closest(".row").querySelector("#account_name").innerText;
+    var account_name = e.currentTarget.closest(".row").querySelector("#account_name").innerText;
+    var account_role = e.currentTarget.closest(".row").querySelector("#account_role").innerText;
+    var account = account_name + '/' + account_role;
     chrome.storage.local.get(["accounts"], function(result) {
         if (result.accounts == undefined) {return}
         if (result.accounts[account] == undefined) {return}
