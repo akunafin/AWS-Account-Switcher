@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <title>AWS Account Switcher</title>
+    <link rel="stylesheet" href="fontawesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="popup.css">
+  </head>
+  <body>
+    <script src="popup.js"></script>
+    <header>
+    </header>
+    <div class="tab">
+      <button class="tablinks fas fa-list-ul" id="accounts_tab"/>
+      <button class="tablinks fas fa-cog" id="settings_tab"/>
+    </div>
+    <div id="accounts_tab" class="tabcontent">
+      <div id="accounts_load">
+        <i class="fas fa-spinner fa-pulse fa-3x"></i>
+        <span id="accounts_load_span"></span>
+      </div>
+      <div id="header_div">
+        <button id='get_accounts'>Get Accounts</button>
+        <button id='delete_accounts'>Delete Accounts</button>
+      </div>
+      <div id="accounts_div">
+      </div>
+    </div>
+    <div id="settings_tab" class="tabcontent">
+      <span class="setting_name">OKTA Domain</span>
+      <input spellcheck="false" class="text_setting_value" id="okta_domain"/>
+      <span class="setting_name">OKTA Username</span>
+      <input spellcheck="false" class="text_setting_value" id="okta_username"/>
+      <span class="setting_name">OKTA Password</span>
+      <input type="password" class="text_setting_value" id="okta_password"/>
+      <div class="login">
+        <button class="login" id="okta_login">
+          <span>Login</span>
+        </button>
+      </div>
+      <div class="login_status" id="login_status_div">
+        <span id="login_status">login status</span>
+      </div>
+      <span class="setting_name">AWS role filters</span>
+      <div id="role_filters_list">
+      </div>
+      <div class="add_role">
+        <button id="add_role_filter" class="fas fa-plus-circle fa-2x"></button>
+      </div>
+      <div id="aws_app">
+        <span class="setting_name">OKTA AWS Application</span>
+        <span id="aws_app_status"></span>
+      </div>
+      <div class="okta_apps">
+        <div class="setting_name_with_button">
+          <span class="setting_name">OKTA Applications</span>
+          <button id="okta_apps_refresh" class="small_button fas fa-sync-alt"></button>
+        </div>  
+        <span id="aws_app_list_status"></span> 
+        <div id="okta_apps_load">
+          <span class="fas fa-spinner fa-pulse fa-3x"></span>
+        </div>
+        <div class="apps_list"></div>
+      </div>
+    </div>
+  </body>
+</html>

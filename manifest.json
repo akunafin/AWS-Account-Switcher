@@ -1,0 +1,30 @@
+{
+    "manifest_version": 2,
+   
+    "name": "AWS AccountManager",
+    "version": "2.0",
+    "description": "The tool to switch AWS account without login",
+
+    "permissions": [
+        "storage",
+        "cookies",
+        "alarms",
+        "idle",
+        "*://*.amazon.com/*",
+        "*://*.okta.com/*",
+        "tabs"
+    ],
+   
+    "background": {
+      "scripts": ["background.js"],
+      "persistent": false
+    },
+
+    "browser_action": {
+      "default_popup": "popup.html"
+    },
+
+    "icons": {
+      "48": "Icons/icon_48.png"
+    }
+}

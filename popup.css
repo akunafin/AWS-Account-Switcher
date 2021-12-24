@@ -1,0 +1,353 @@
+body {
+    margin: 0;
+    position: relative;
+} 
+/* Style the tab */
+.tab {
+    width: 370;
+    overflow: hidden;
+    background-color: #12293b;
+}
+/* Style the buttons that are used to open the tab content */
+.tab button {
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    color: #eaeded;
+    background-color: #12293b;
+}
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #12293b;
+    color: #dd6b10;
+}  
+/* Create an active/current tablink class */
+.tab button.active {
+    background-color: #dd6b10;
+    color: #eaeded;
+}
+/* Style the tab content */
+.tabcontent {
+    position: relative;
+    display: none;
+    border-top: none;
+}
+#header_div {
+    width: 350;
+    background: #34373a;
+    color: #eaeded;
+    padding: 10;
+    display: flex;
+}
+#accounts_div {
+    width: 370;
+}
+#header_div button {
+    background: #34373a;
+    flex: 1;
+    border: 0;
+    color: #eaeded;
+    font-size: 16;
+}
+#header_div button:hover{
+    color: #dd6b10;
+}
+.row {
+    height: 40px;
+    display: flex;
+    background: #eaeded;
+    color: #16191f;
+    flex-direction: row;
+    align-self: stretch;
+    align-items: flex-start;
+    border-style: solid;
+    border-bottom: 1;
+    border-width: 1px;
+}
+.account {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    align-self: stretch;
+}
+.menu_drop_btn {
+    display: flex;
+    justify-content: center; 
+    flex-direction: column;
+    align-self: stretch;
+    background: #fdfdfd;
+    color: #16191f;
+    width: 40px;
+    text-align: center;
+}
+.menu_drop_btn:hover {
+    color: #dd6b10;
+}
+.drop_content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    position: absolute;
+    left: 370px;
+    height: 40px;
+    width: 368px;
+    z-index: 1;
+    background: #eaeded;
+}
+.menu_options {
+    display: flex;
+    flex-basis: 85%;
+    align-self: stretch;
+    background: #eaeded;
+    height: 100%;
+}
+.menu_option {
+    display: flex;
+    align-items: flex-start;
+    padding: 10;
+    margin-left: 10;
+    margin-top: 10;
+    margin-bottom: 10;
+    border-style: solid;
+    border-radius: 10px;
+    border-color: #16191f;
+    border-width: 1px;
+}
+.menu_option:hover {
+    color: #dd6b10;
+}
+.menu_option div.fa {
+    display: flex;
+    justify-content: center; 
+    flex-direction: column;
+    align-self: stretch;
+    margin-right: 10;
+}
+.menu_option div.option_text {
+    display: flex;
+    justify-content: center; 
+    flex-direction: column;
+    align-self: stretch;
+}
+#account_name_role {
+    padding: 10;
+    font-size: 16;
+    display: flex;
+    align-self: stretch;
+    flex: 1;
+    justify-content: center; 
+    flex-direction: column;
+    text-align: center;
+}
+#account_role {
+    color:#035390;
+    font-size: small;
+}
+#status_div {
+    font-size: 10;
+    float: left;
+    overflow: auto;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.account.select {
+    background: #dd6b10;
+    color: #eaeded;
+}
+.account.select:hover {
+    background: #eaeded;
+    color: #dd6b10;
+}
+#status {
+    flex:1;
+}
+#status.red {
+    color: #d30606;
+}
+#status.green {
+    color: #1daf03;
+}
+#status_div div{
+    border-width: 1px;
+    border-color: #16191f;
+    color: #16191f;
+    background: #ffffff;
+    border-style: solid;
+    padding-right: 5;
+    padding-left: 5;
+    border-radius: 5px;
+    margin-top: 2;
+    margin-right: 2;
+    flex-direction: row;
+    align-items: stretch;
+    z-index: 1;
+}
+.account:hover{
+    color: #dd6b10;
+}
+#accounts_load {
+    position: absolute;
+    top: 0%;
+    width: 100%;
+    height: 100%;
+    background: rgb(130, 134, 130);
+    opacity: 0.9;
+    color: #000000;
+    display: none;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items:center;
+    z-index: 2;
+}
+#accounts_load i,
+#accounts_load span {
+    margin: 10;
+}
+div#Settings {
+    width: 370;
+    display: inline-flex;
+    flex-direction: column;
+    margin: 0;
+}
+.setting_name {
+    display: flex;
+    font-size: 14px;
+    font-weight: bold;
+    color: #444;
+    margin: 10;
+}
+.setting_name_with_button {
+    display: flex;
+    justify-content: space-between;
+}
+.text_setting_value {
+    display: flex;
+    margin: 10;
+    margin-bottom: 5;
+    width: 350;
+    padding: 1px 2px;
+}
+div.login {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+button.login {
+    margin: 10;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    color: #eaeded;
+    background-color: #12293b;
+}
+button.login:hover {
+    background-color: #12293b;
+    color: #dd6b10;
+}
+button.login:disabled {
+    background-color: #34373a;
+    color: #eaeded;
+}
+div.login_status {
+    width: 100%;
+    display: none;
+    justify-content: center;
+    margin: 10;
+}
+div.login_status span {
+    width: 95%;
+}
+div.login_status span.red {
+    color: red;
+}
+div.login_status span.green {
+    color: green;
+}
+div.add_role {
+    display: flex;
+    justify-content: center;
+}
+.role_filter {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.role_filter input {
+    margin-top: 0;
+    margin-right: 0;
+    width: 315;
+}
+.role_filter button {
+    margin-top: 0;
+}
+#add_role_filter {
+    margin: 10;
+    margin-top: 0;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color: #12293b;
+    background-color: inherit;
+}
+#add_role_filter:hover {
+    color: #dd6b10;
+}
+#okta_apps_load { 
+    display: none;
+    justify-content: center;
+    color: #16191f;
+}
+.okta_aws_app {
+    display: flex;
+    color: #16191f;
+    flex-direction: row;
+    align-self: stretch;
+    align-items: center;
+    justify-content: space-between;
+}
+.small_button {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    margin: 10;
+    background-color: inherit;
+}
+.small_button:hover {
+    color: #dd6b10;
+}
+#aws_app_status {
+    margin: 10;
+    color: red;
+}
+#aws_app_list_status {
+    margin: 10;
+    color: red;
+}
+.okta_app {
+    display: flex;
+    background: #f8fafa;
+    color: #16191f;
+    flex-direction: row;
+    align-self: stretch;
+    align-items: center;
+    border-style: solid;
+    border-bottom: 1;
+    border-left: 0;
+    border-right: 0;
+    border-width: 1px;
+}
+.okta_app:hover {
+    color: #dd6b10;
+}
+.okta_app img {
+    margin: 5;
+}
