@@ -290,7 +290,7 @@ function aws_login(callback) {
         var aws_saml_url = storage.settings.aws_app.url;
         //Check okta login
         var list_apps_request = new XMLHttpRequest();
-        list_apps_url = "https://" + storage.settings.okta_domain + "/api/v1/apps";
+        list_apps_url = "https://" + storage.settings.okta_domain + "/api/v1/users/me/home/tabs";
         list_apps_request.open("GET", list_apps_url);
         list_apps_request.send();
         list_apps_request.onload = function() {
