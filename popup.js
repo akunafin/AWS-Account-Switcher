@@ -212,7 +212,7 @@ function load_okta_apps() {
         okta_apps_div.innerHTML = '';
         document.getElementById("okta_apps_load").style.display = 'flex'
         var list_apps_request = new XMLHttpRequest();
-        list_apps_url = "https://" + storage.settings.okta_domain + "/api/v1/apps";
+        list_apps_url = "https://" + storage.settings.okta_domain + "/api/v1/users/me/home/tabs?type=all&expand=items%2Citems.resource";
         list_apps_request.open("GET", list_apps_url);
         list_apps_request.send();
         list_apps_request.onload = function() {
@@ -228,30 +228,33 @@ function load_okta_apps() {
                 return
             }
             aws_app_list_status.style.display = 'none'
-            var okta_apps = JSON.parse(list_apps_request.response);
-            okta_apps.forEach(app => {
-                var app_div = document.createElement("div");
-                app_div.classList.add("okta_app");
-                okta_apps_div.appendChild(app_div);
-                var app_img = document.createElement("img");
-                app_img.src = app._links.logo[0].href;
-                app_div.appendChild(app_img);
-                var app_label = document.createElement("span");
-                app_label.innerText = app.label;
-                app_div.appendChild(app_label);  
-                var app_url = document.createElement("input");
-                app_url.type = "hidden";
-                app_url.id = "app_url";
-                app_url.value = app._links.appLinks[0].href;   
-                app_div.appendChild(app_url); 
-                var app_id = document.createElement("input");
-                app_id.type = "hidden";
-                app_id.id = "app_id";
-                app_id.value = app.id;   
-                app_div.appendChild(app_id); 
-                app_div.addEventListener("click", select_aws_app);
+            var okta_tabs = JSON.parse(list_apps_request.response);
+            okta_tabs.forEach(okta_tab => {
+                var okta_apps = okta_tab._embedded.items;
+                okta_apps.forEach(app => {
+                    var app_div = document.createElement("div");
+                    app_div.classList.add("okta_app");
+                    okta_apps_div.appendChild(app_div);
+                    var app_img = document.createElement("img");
+                    app_img.src = app._embedded.resource.logoUrl;
+                    app_div.appendChild(app_img);
+                    var app_label = document.createElement("span");
+                    app_label.innerText = app._embedded.resource.label;
+                    app_div.appendChild(app_label);  
+                    var app_url = document.createElement("input");
+                    app_url.type = "hidden";
+                    app_url.id = "app_url";
+                    app_url.value = app._embedded.resource.linkUrl;   
+                    app_div.appendChild(app_url); 
+                    var app_id = document.createElement("input");
+                    app_id.type = "hidden";
+                    app_id.id = "app_id";
+                    app_id.value = app.id;   
+                    app_div.appendChild(app_id); 
+                    app_div.addEventListener("click", select_aws_app);
+                });
+                document.getElementById("okta_apps_load").style.display = 'none'
             });
-            document.getElementById("okta_apps_load").style.display = 'none'
         }
     });
 }

@@ -348,6 +348,9 @@ div.add_role {
 .okta_app:hover {
     color: #dd6b10;
 }
+.okta_aws_app img,
 .okta_app img {
+    max-width: 100;
+    max-height: 40;
     margin: 5;
 }
