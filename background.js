@@ -325,6 +325,7 @@ function aws_login(callback) {
 }
 
 function okta_login(callback, callback_argument = null) {
+    console.log('okta login');
     chrome.storage.local.get(["settings"], function(storage){
         chrome.storage.local.set({"login_status": {"status": "progress", "message": "signing in to okta..."}});
         chrome.runtime.sendMessage({"method": "UpdateLoginStatus"});
@@ -366,25 +367,85 @@ function okta_login(callback, callback_argument = null) {
             }
             authn_response = JSON.parse(authn.response);
 
-            //Get session cookie
-            var sessionToken = authn_response.sessionToken;
-            var cookie_url = "https://" + domain + "/login/sessionCookieRedirect?checkAccountSetupComplete=true&token=" + sessionToken + "&redirectUrl=https%3A%2F%2F" + domain + "%2Fuser%2Fnotifications"
-            var cookie_request = new XMLHttpRequest(); 
-            cookie_request.open("GET", cookie_url);
-            cookie_request.send();
-            cookie_request.onload = function() {
-                if (cookie_request.status == 200) {
-                    chrome.storage.local.set({"login_status": {"status": "success", "message": "Login success!"}});
-                    chrome.runtime.sendMessage({"method": "UpdateLoginStatus"});
-                    if (callback) {
-                        callback(callback_argument);
+            //MFA if requested
+            if (authn_response.status == "MFA_REQUIRED") {
+                let factor_id = null;
+                authn_response._embedded.factors.forEach(factor => {
+                    if (factor.factorType == "push") {
+                        factor_id = factor.id;
+                        return;
                     }
-                    return;
-                } else {
-                    chrome.storage.local.set({"login_status": {"status": "failed", "message": "Login failed! Update cookie request got response code " + cookie_request.status}});
+                });
+                if (!factor_id) {
+                    chrome.storage.local.set({"login_status": {"status": "failed", "message": "Login failed! MFA failed"}});
                     chrome.runtime.sendMessage({"method": "UpdateLoginStatus"});
-                    return;
+                    return
                 }
+                let mfa_url = "https://" + domain + '/api/v1/authn/factors/' + factor_id + '/verify'
+                let mfa_body = {
+                    factorId: factor_id,
+                    stateToken: authn_response.stateToken
+                };
+                let mfa_try_count = 0;
+                let mfa_interval = setInterval(function() {
+                    mfa_try_count++;
+                    let mfa_request = new XMLHttpRequest();
+                    mfa_request.open("POST", mfa_url);
+                    mfa_request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                    mfa_request.send(JSON.stringify(mfa_body));
+                    mfa_request.onload = function() {
+                        if (mfa_request.status != 200) {
+                            chrome.storage.local.set({"login_status": {"status": "failed", "message": "Login failed! MFA failed"}});
+                            chrome.runtime.sendMessage({"method": "UpdateLoginStatus"});
+                            clearInterval(mfa_interval);
+                            return;
+                        }
+                        let mfa_response = JSON.parse(mfa_request.response);
+                        console.log(mfa_response);
+                        if (mfa_response.status == 'MFA_CHALLENGE') {
+                            chrome.storage.local.set({"login_status": {"status": "progress", "message": "Okta PUSH notification sent. Waiting for approve."}});
+                            chrome.runtime.sendMessage({"method": "UpdateLoginStatus"});
+                        } else if (mfa_response.status == 'SUCCESS') {
+                            console.log('mfa success');
+                            chrome.storage.local.set({"login_status": {"status": "progress", "message": "OKTA MFA authentication success"}});
+                            chrome.runtime.sendMessage({"method": "UpdateLoginStatus"});
+                            clearInterval(mfa_interval);
+                            getSessionCookie(callback, callback_argument, mfa_response.sessionToken);
+                        }
+                        if (mfa_try_count > 11) {
+                            chrome.storage.local.set({"login_status": {"status": "failed", "message": "OKTA MFA failed. PUSH not approved"}});
+                            chrome.runtime.sendMessage({"method": "UpdateLoginStatus"});
+                            clearInterval(mfa_interval);
+                        }
+                    }
+                }, 5000);
+            } else {
+                getSessionCookie(callback, callback_argument, authn_response.sessionToken);
+            }
+
+        }
+    });
+}
+
+function getSessionCookie(callback, callback_argument, sessionToken) {
+    chrome.storage.local.get(["settings"], function(storage){
+        var domain = storage.settings.okta_domain;
+        var cookie_url = "https://" + domain + "/login/sessionCookieRedirect?checkAccountSetupComplete=true&token=" + sessionToken + "&redirectUrl=https%3A%2F%2F" + domain + "%2Fuser%2Fnotifications"
+        var cookie_request = new XMLHttpRequest(); 
+        cookie_request.open("GET", cookie_url);
+        cookie_request.send();
+        cookie_request.onload = function() {
+            if (cookie_request.status == 200) {
+                chrome.storage.local.set({"login_status": {"status": "success", "message": "Login success!"}});
+                chrome.runtime.sendMessage({"method": "UpdateLoginStatus"});
+                if (callback) {
+                    callback(callback_argument);
+                }
+                return;
+            } else {
+                chrome.storage.local.set({"login_status": {"status": "failed", "message": "Login failed! Update cookie request got response code " + cookie_request.status}});
+                chrome.runtime.sendMessage({"method": "UpdateLoginStatus"});
+                return;
             }
         }
     });
