@@ -51,6 +51,7 @@ function load_popup() {
 function load_aws_accounts() {
     update_accounts_status();
     var current_account = "";
+    var current_role = "";
     chrome.cookies.getAll({"domain": ".amazon.com", "name": "aws-userInfo"}, function(user_info_cookies){
         if (user_info_cookies.length != 0) {
             for (i=0; i<user_info_cookies.length; i++) {
